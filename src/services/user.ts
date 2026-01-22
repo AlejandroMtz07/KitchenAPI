@@ -50,7 +50,7 @@ export const loginUser = async (req: Request, res: Response) => {
         return res.status(401).json({error: 'Incorrect password'});
     }
 
-    const token = generateToken(user);
+    const token = generateToken({id: user.id});
     return res.status(200).json({msg: 'Welcome: '+user.name, token: token});
 
 }
