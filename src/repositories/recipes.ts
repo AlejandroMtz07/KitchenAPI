@@ -35,6 +35,8 @@ export const saveRecipe = async (recipe: SavedRecipe) => {
             [recipe.name, recipe.description, recipe.is_private, recipe.ingredients, recipe.image, recipe.Id_user]
         );
     return await pool
-        .query('INSERT INTO user_recipes (id_user,id_recipe,saved_at) values (?,?,now());', [recipe.Id_user, rows.insertId]);
+        .query('INSERT INTO user_recipes (id_user,id_recipe,saved_at) values (?,?,now());', 
+            [recipe.Id_user, rows.insertId]
+    );
 
 }
