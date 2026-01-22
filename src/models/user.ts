@@ -7,10 +7,5 @@ export type User = {
     password: string,
     created_at: string
 }
-export type UserRegisterData ={
-    name: string,
-    lastname: string,
-    username: string,
-    email: string,
-    password: string
-}
+
+export type UserRegisterData = Pick<User,'name'|'lastname'|'email'|'password'|'username'>
