@@ -1,22 +1,26 @@
 import { FieldPacket } from "mysql2";
 import { pool } from "../config/db"
 import { Recipe, SavedRecipe } from "../models/recipe";
+import { ResultSetHeader } from "mysql2";
 
 
-export const findAllRecipes = async ()=>{
-    const [rows] : [Recipe[], FieldPacket[]] = await pool.query('SELECT * FROM recipes where is_private = 0;');
+export const findAllRecipes = async () => {
+    const [rows]: [Recipe[], FieldPacket[]] = await pool.query('SELECT * FROM recipes where is_private = 0;');
     return rows;
 }
 
-export const findUserRecipes = async (userId : number) => {
-    const [rows]: [Recipe[],FieldPacket[]] = await pool.query('SELECT * FROM recipes where Id_user = ?;', [userId]);
+export const findUserRecipes = async (userId: number) => {
+    const [rows]: [Recipe[], FieldPacket[]] = await pool.query('SELECT * FROM recipes where Id_user = ?;', [userId]);
     return rows;
 }
 
-export const saveRecipe = async (recipe: SavedRecipe) =>{
-    return await pool
-        .query(
+export const saveRecipe = async (recipe: SavedRecipe) => {
+    const [rows] = await pool
+        .query<ResultSetHeader>(
             'INSERT INTO recipes (name,description,is_private,ingredients,image,Id_user) values (?,?,?,?,?,?);',
             [recipe.name, recipe.description, recipe.is_private, recipe.ingredients, recipe.image, recipe.Id_user]
         );
+    return await pool
+    .query('INSERT INTO user_recipes (id_user,id_recipe,saved_at) values (?,?,now());', [recipe.Id_user, rows.insertId]);
+
 }
