@@ -36,9 +36,6 @@ router.get(
 
 router.post(
     '/recipes/add',
-    [
-        
-    ],
     authenticated,
     addRecipe
 )
