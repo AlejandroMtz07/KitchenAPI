@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { emailExists, getUser, saveUser, usernameExists } from "../repositories/user";
 import { User, UserRegisterData } from "../models/user";
 import { comparePassword } from "../utils/auth";
+import { generateToken } from "../utils/jwt";
 
 
 export const registerUser = async (req: Request, res: Response) => {
@@ -48,6 +49,8 @@ export const loginUser = async (req: Request, res: Response) => {
     if(!await comparePassword(password, user.password)){
         return res.status(401).json({error: 'Incorrect password'});
     }
-    return res.status(200).json({msg: 'Welcome: '+user.name});
+
+    const token = generateToken(user);
+    return res.status(200).json({msg: 'Welcome: '+user.name, token: token});
 
 }
