@@ -1,6 +1,6 @@
 import { RowDataPacket } from "mysql2";
 import { pool } from "../config/db";
-import { UserRegisterData } from "../models/user";
+import { User, UserRegisterData } from "../models/user";
 import { hashPassword } from "../utils/auth";
 
 
@@ -16,11 +16,16 @@ export const usernameExists = async (username: string) => {
     return rows[0];
 }
 
+//Save the user in the database
 export const saveUser = async (user: UserRegisterData) => {
-
     const hashedPassword = await hashPassword(user.password);
     return await pool.query(
         'INSERT INTO users (name,lastname,username,email,password,created_at) values (?,?,?,?,?,now())',
         [user.name, user.lastname, user.username, user.email, hashedPassword])
 
+}
+
+export const getUser = async (email: string):Promise<User>=>{
+    const [rows] = await pool.query('SELECT * FROM users where email = ?;',[email]);
+    return rows[0];
 }
