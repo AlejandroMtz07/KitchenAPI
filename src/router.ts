@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { registerUser } from './repositories/auth';
 import { handleInputErrors } from './middlewares/validation';
 import { body } from 'express-validator';
+import { registerUser } from './services/user';
 
 const router = Router();
 
