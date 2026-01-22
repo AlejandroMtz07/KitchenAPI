@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { handleInputErrors } from './middlewares/validation';
+import { authenticated, handleInputErrors } from './middlewares/validation';
 import { body } from 'express-validator';
 import { loginUser, registerUser } from './services/user';
 import { getRecipes } from './services/recipes';

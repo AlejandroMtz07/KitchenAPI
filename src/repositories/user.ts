@@ -28,3 +28,8 @@ export const getUser = async (email: string):Promise<User>=>{
     const [rows] = await pool.query('SELECT * FROM users where email = ?;',[email]);
     return rows[0];
 }
+
+export const getUserById = async (id: number) => {
+    const [rows] = await pool.query('SELECT * FROM users where id = ?;',[id]);
+    return rows[0];
+}
