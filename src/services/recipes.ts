@@ -16,20 +16,25 @@ export const getRecipes = async (req: Request, res: Response) => {
 
 export const addRecipe = async (req: Request, res: Response) => {
 
+    //Instance of formidable
     const form = formidable({ multiples: false });
 
     try {
+        //Parsing the received data and image
         form.parse(
             req,
             (error, fields, files) => {
 
+                //Getting the image
                 const image = files.file[0].filepath;
                 
+                //Getting the recipe information
                 const { name, description, is_private, ingredients } = fields;
 
+                //Sending the image to our cloud
                 cloudinary.uploader.upload(
                     image,
-                    {public_id: uuid()},
+                    {public_id: uuid()}, //Setting the image an unique ID
                     async function (error, result){
                         if(error){
                             return res.status(500).json({error: 'There was an error uploading the image'});
@@ -44,7 +49,7 @@ export const addRecipe = async (req: Request, res: Response) => {
                                 image: imageUrl,
                                 Id_user: req.user.id
                             }
-                            await saveRecipe(recipe);
+                            await saveRecipe(recipe); //Sending the recipe to the database
                             return res.status(200).json({msg: recipe});
                         }
                     }
