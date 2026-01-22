@@ -34,6 +34,11 @@ router.get(
     getRecipes
 )
 
+router.post(
+    '/recipes/add',
+    authenticated,
+    
+)
 export default router;
 
 

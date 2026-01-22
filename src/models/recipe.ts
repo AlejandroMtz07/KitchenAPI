@@ -5,5 +5,6 @@ export type Recipe = {
     description: string,
     is_private: boolean,
     ingredients: string,
+    image: string
     Id_user: number
 }
