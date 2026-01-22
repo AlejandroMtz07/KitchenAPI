@@ -1,5 +1,5 @@
 import { pool } from "../config/db"
-import { Recipe } from "../models/recipe";
+import { Recipe, SavedRecipe } from "../models/recipe";
 
 
 export const findAllRecipes = async ()=>{
@@ -7,6 +7,10 @@ export const findAllRecipes = async ()=>{
     return rows;
 }
 
-export const saveRecipe = async (recipe: Recipe) =>{
-    
+export const saveRecipe = async (recipe: SavedRecipe) =>{
+    return await pool
+        .query(
+            'INSERT INTO recipes (name,description,is_private,ingredients,image,Id_user) values (?,?,?,?,?,?);',
+            [recipe.name, recipe.description, recipe.is_private, recipe.ingredients, recipe.image, recipe.Id_user]
+        );
 }
