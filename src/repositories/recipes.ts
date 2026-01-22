@@ -10,7 +10,21 @@ export const findAllRecipes = async () => {
 }
 
 export const findUserRecipes = async (userId: number) => {
-    const [rows]: [Recipe[], FieldPacket[]] = await pool.query('SELECT * FROM recipes where Id_user = ?;', [userId]);
+    const [rows]: [Recipe[], FieldPacket[]] = await pool.query(
+        `SELECT
+            r.id,
+            r.name,
+            r.description,
+            r.ingredients,
+            r.image,
+            r.is_private,
+            r.Id_user
+        FROM recipes r
+        JOIN user_recipes ur
+        ON ur.id_recipe = r.id
+        WHERE ur.id_user = ?;`,
+        [userId]
+    );
     return rows;
 }
 
@@ -21,6 +35,6 @@ export const saveRecipe = async (recipe: SavedRecipe) => {
             [recipe.name, recipe.description, recipe.is_private, recipe.ingredients, recipe.image, recipe.Id_user]
         );
     return await pool
-    .query('INSERT INTO user_recipes (id_user,id_recipe,saved_at) values (?,?,now());', [recipe.Id_user, rows.insertId]);
+        .query('INSERT INTO user_recipes (id_user,id_recipe,saved_at) values (?,?,now());', [recipe.Id_user, rows.insertId]);
 
 }
