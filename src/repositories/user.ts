@@ -1,4 +1,3 @@
-import { RowDataPacket } from "mysql2";
 import { pool } from "../config/db";
 import { User, UserRegisterData } from "../models/user";
 import { hashPassword } from "../utils/auth";

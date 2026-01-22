@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { handleInputErrors } from './middlewares/validation';
 import { body } from 'express-validator';
 import { loginUser, registerUser } from './services/user';
+import { getRecipes } from './services/recipes';
 
 const router = Router();
 
@@ -26,6 +27,11 @@ router.post(
     ],
     handleInputErrors,
     loginUser
+);
+
+router.get(
+    '/recipes',
+    getRecipes
 )
 
 export default router;
