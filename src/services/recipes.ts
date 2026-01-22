@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { findAllRecipes, saveRecipe } from "../repositories/recipes";
+import { findAllRecipes, findUserRecipes, saveRecipe } from "../repositories/recipes";
 import formidable from 'formidable';
 import cloudinary from "../config/cloudinary";
-import { SavedRecipe } from "../models/recipe";
+import { Recipe, SavedRecipe } from "../models/recipe";
 import { v4 as uuid} from 'uuid';
 
 export const getRecipes = async (req: Request, res: Response) => {
@@ -12,6 +12,14 @@ export const getRecipes = async (req: Request, res: Response) => {
 
     return res.status(200).json({ recipes: recipes });
 
+}
+
+export const getUserRecipes = async (req: Request, res: Response) =>{
+    const userRecipes = await findUserRecipes(req.user.id);
+    if(userRecipes.length === 0){
+        return res.status(404).json({msg: 'Any recipe found'});
+    }
+    return res.status(200).json({recipes: userRecipes});
 }
 
 export const addRecipe = async (req: Request, res: Response) => {

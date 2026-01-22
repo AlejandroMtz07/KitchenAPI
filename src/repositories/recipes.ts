@@ -1,9 +1,15 @@
+import { FieldPacket } from "mysql2";
 import { pool } from "../config/db"
 import { Recipe, SavedRecipe } from "../models/recipe";
 
 
 export const findAllRecipes = async ()=>{
-    const [rows] = await pool.query('SELECT * FROM recipes where is_private = 0;');
+    const [rows] : [Recipe[], FieldPacket[]] = await pool.query('SELECT * FROM recipes where is_private = 0;');
+    return rows;
+}
+
+export const findUserRecipes = async (userId : number) => {
+    const [rows]: [Recipe[],FieldPacket[]] = await pool.query('SELECT * FROM recipes where Id_user = ?;', [userId]);
     return rows;
 }
 

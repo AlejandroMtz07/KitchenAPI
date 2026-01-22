@@ -1,5 +1,5 @@
-
-export type Recipe = {
+import { RowDataPacket } from "mysql2"
+export interface Recipe extends RowDataPacket {
     id: number,
     name: string,
     description: string,

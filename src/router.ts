@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { authenticated, handleInputErrors } from './middlewares/validation';
 import { body } from 'express-validator';
 import { loginUser, registerUser } from './services/user';
-import { addRecipe, getRecipes } from './services/recipes';
+import { addRecipe, getRecipes, getUserRecipes } from './services/recipes';
 
 const router = Router();
 
@@ -30,8 +30,14 @@ router.post(
 );
 
 router.get(
-    '/recipes',
+    '/recipes/all',
     getRecipes
+)
+
+router.get(
+    '/recipes',
+    authenticated,
+    getUserRecipes
 )
 
 router.post(
