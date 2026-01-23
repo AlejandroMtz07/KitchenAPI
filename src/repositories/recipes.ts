@@ -67,3 +67,18 @@ export const getRecipesByUsername = async (username : string)=>{
     )
     return rows;
 }
+
+export const saveRecipeFromPublicRecipes = async (user_id: number,recipe_id : number)=>{
+    return await pool.query(
+        'INSERT INTO user_recipes (id_user,id_recipe,saved_at) values (?,?,now());',
+        [user_id,recipe_id]
+    );
+};
+
+export const getRecipeById = async (recipe_id: number)=>{
+    const [rows] : [Recipe[],FieldPacket[]] = await pool.query(
+        'SELECT * FROM recipes where id = ?;',
+        [recipe_id]
+    )
+    return rows[0];
+}

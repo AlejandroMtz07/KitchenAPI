@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { findAllRecipes, findUserRecipes, getRecipesByUsername, saveRecipe } from "../repositories/recipes";
+import { findAllRecipes, findUserRecipes, getRecipeById, getRecipesByUsername, saveRecipe, saveRecipeFromPublicRecipes } from "../repositories/recipes";
 import formidable from 'formidable';
 import cloudinary from "../config/cloudinary";
 import { Recipe, SavedRecipe } from "../models/recipe";
@@ -84,4 +84,24 @@ export const getUserPublicRecipes = async (req: Request, res: Response)=>{
         return res.status(404).json({error: 'The user dont have any public recipe'});
     }
     return res.status(200).json({recipes: publicUserRecipes});
+}
+
+//Function that handle the function of add a recipe from the public recipes book
+//to the user recipes (like saving the recipe)
+export const savePublicRecipe = async (req: Request, res: Response)=>{
+
+    const {id} = req.params;
+
+    const recipe = await getRecipeById(Number(id));
+    if(!recipe){
+        return res.status(404).json({error: 'Recipe not found'});
+    }
+
+    if(recipe.Id_user === req.user.id){
+        return res.status(409).json({error: 'This recipe is already yours'});
+    }
+
+    await saveRecipeFromPublicRecipes(req.user.id, Number(id));
+    return res.status(200).json({msg: 'Recipe added successfully'});
+
 }

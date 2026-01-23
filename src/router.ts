@@ -2,10 +2,11 @@ import { Router } from 'express';
 import { authenticated, handleInputErrors } from './middlewares/validation';
 import { body } from 'express-validator';
 import { loginUser, registerUser } from './services/user';
-import { addRecipe, getRecipes, getUserPublicRecipes, getUserRecipes } from './services/recipes';
+import { addRecipe, getRecipes, getUserPublicRecipes, getUserRecipes, savePublicRecipe } from './services/recipes';
 
 const router = Router();
 
+//User register
 router.post(
     '/auth/register',
     [
@@ -19,6 +20,7 @@ router.post(
     registerUser
 );
 
+//User login
 router.post(
     '/auth/login',
     [
@@ -29,27 +31,39 @@ router.post(
     loginUser
 );
 
+//Get global recipes book
 router.get(
     '/recipes/all',
     getRecipes
-)
+);
 
+//Get user recipes
 router.get(
     '/recipes',
     authenticated,
     getUserRecipes
-)
+);
 
+//Get recipes by username
 router.get(
     '/recipes/:username',
     getUserPublicRecipes
-)
+);
 
+//Add a new recipe
 router.post(
     '/recipes/add',
     authenticated,
     addRecipe
+);
+
+//Add a recipe from public recipes book to the user recipe book
+router.post(
+    '/recipes/:id',
+    authenticated,
+    savePublicRecipe
 )
+
 export default router;
 
 
