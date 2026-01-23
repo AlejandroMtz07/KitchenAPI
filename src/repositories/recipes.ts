@@ -40,3 +40,24 @@ export const saveRecipe = async (recipe: SavedRecipe) => {
     );
 
 }
+
+export const getRecipesByUsername = async (username : string)=>{
+    const [rows] : [Recipe[], FieldPacket[]] = await pool.query(
+        `SELECT
+            r.id,
+            r.name,
+            r.description,
+            r.ingredients,
+            r.image,
+            r.Id_user
+        FROM users u
+        JOIN user_recipes ur
+        ON ur.id_user = u.id
+        JOIN recipes r
+        ON r.id = ur.id_recipe
+        WHERE u.username = ?
+        AND r.is_private = false;`,
+        [username]
+    )
+    return rows;
+}

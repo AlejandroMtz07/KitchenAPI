@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { findAllRecipes, findUserRecipes, saveRecipe } from "../repositories/recipes";
+import { findAllRecipes, findUserRecipes, getRecipesByUsername, saveRecipe } from "../repositories/recipes";
 import formidable from 'formidable';
 import cloudinary from "../config/cloudinary";
 import { Recipe, SavedRecipe } from "../models/recipe";
@@ -69,4 +69,14 @@ export const addRecipe = async (req: Request, res: Response) => {
         return res.status(500).json({ error: 'Something happened' });
     }
 
+}
+
+export const getUserPublicRecipes = async (req: Request, res: Response)=>{
+
+    const {username} = req.params;
+    const publicUserRecipes = await getRecipesByUsername(username.toString());
+    if(publicUserRecipes.length === 0){
+        return res.status(404).json({error: 'The user dont have any public recipe'});
+    }
+    return res.status(200).json({recipes: publicUserRecipes});
 }

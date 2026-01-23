@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { authenticated, handleInputErrors } from './middlewares/validation';
 import { body } from 'express-validator';
 import { loginUser, registerUser } from './services/user';
-import { addRecipe, getRecipes, getUserRecipes } from './services/recipes';
+import { addRecipe, getRecipes, getUserPublicRecipes, getUserRecipes } from './services/recipes';
 
 const router = Router();
 
@@ -38,6 +38,11 @@ router.get(
     '/recipes',
     authenticated,
     getUserRecipes
+)
+
+router.get(
+    '/recipes/:username',
+    getUserPublicRecipes
 )
 
 router.post(
