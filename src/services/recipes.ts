@@ -5,6 +5,7 @@ import cloudinary from "../config/cloudinary";
 import { Recipe, SavedRecipe } from "../models/recipe";
 import { v4 as uuid} from 'uuid';
 
+//Function that get all the public recipes published by all the users
 export const getRecipes = async (req: Request, res: Response) => {
 
     //Getting all the recipes from the database
@@ -14,6 +15,7 @@ export const getRecipes = async (req: Request, res: Response) => {
 
 }
 
+//Function that get all the recipes of the user, including the private recipes
 export const getUserRecipes = async (req: Request, res: Response) =>{
     const userRecipes = await findUserRecipes(req.user.id);
     if(userRecipes.length === 0){
@@ -22,6 +24,7 @@ export const getUserRecipes = async (req: Request, res: Response) =>{
     return res.status(200).json({recipes: userRecipes});
 }
 
+//Function that save the recipe and upload the image of the recipe
 export const addRecipe = async (req: Request, res: Response) => {
 
     //Instance of formidable
@@ -71,6 +74,8 @@ export const addRecipe = async (req: Request, res: Response) => {
 
 }
 
+//Function that get all the public recipes of the user wanted
+//the username is passed in the url by params
 export const getUserPublicRecipes = async (req: Request, res: Response)=>{
 
     const {username} = req.params;

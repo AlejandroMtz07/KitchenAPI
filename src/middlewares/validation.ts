@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { getUserById } from "../repositories/user";
 import { User } from "../models/user";
 
-
+//Setting the user information in the request for future usage in other endpoints
 declare global{
     namespace Express {
         interface Request {
@@ -13,6 +13,8 @@ declare global{
     }
 }
 
+//Check if the dependency express-validator has errors and if it has errors
+//send the field errors otherwise, let the request continue
 export const handleInputErrors = (req: Request, res: Response, next: NextFunction) =>{
 
     let errors = validationResult(req);
@@ -22,6 +24,8 @@ export const handleInputErrors = (req: Request, res: Response, next: NextFunctio
     next();
 }
 
+//Check if a user is authenticated or if the token is valid, if it's not, return an error message
+//otherwise, let the request continue
 export const authenticated = async (req:Request, res: Response, next: NextFunction) => {
 
     const bearer = req.headers.authorization;

@@ -5,6 +5,8 @@ import { ResultSetHeader } from "mysql2";
 
 
 export const findAllRecipes = async () => {
+    //Setting the two types of the response, being the Recipe type of the data that we get from
+    // the database.
     const [rows]: [Recipe[], FieldPacket[]] = await pool.query('SELECT * FROM recipes where is_private = 0;');
     return rows;
 }
@@ -29,6 +31,10 @@ export const findUserRecipes = async (userId: number) => {
 }
 
 export const saveRecipe = async (recipe: SavedRecipe) => {
+    //Using the interface ResultSetHeader wich allow us to get the id of the inserted recipe
+    //because when we insert data, the database doesn't resturn any information about the 
+    //inserted information,
+    //and something more information but, by now, irrelevant.
     const [rows] = await pool
         .query<ResultSetHeader>(
             'INSERT INTO recipes (name,description,is_private,ingredients,image,Id_user) values (?,?,?,?,?,?);',

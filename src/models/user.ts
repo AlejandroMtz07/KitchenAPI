@@ -1,3 +1,4 @@
+//Type for the users stored in the database
 export type User = {
     id: number,
     name: string,
@@ -8,4 +9,5 @@ export type User = {
     created_at: string
 }
 
+//Type for the data sended for the user register
 export type UserRegisterData = Pick<User,'name'|'lastname'|'email'|'password'|'username'>

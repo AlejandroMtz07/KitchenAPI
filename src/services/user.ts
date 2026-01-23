@@ -4,7 +4,7 @@ import { User, UserRegisterData } from "../models/user";
 import { comparePassword } from "../utils/auth";
 import { generateToken } from "../utils/jwt";
 
-
+//Save a user in the database
 export const registerUser = async (req: Request, res: Response) => {
 
     //Getting the values from the request 
@@ -36,6 +36,8 @@ export const registerUser = async (req: Request, res: Response) => {
 
 }
 
+//Method that return a token with user information if the user send valid credentials
+//and some more validations of the sended credentials
 export const loginUser = async (req: Request, res: Response) => {
 
     const { email, password } = req.body;

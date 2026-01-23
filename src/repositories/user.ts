@@ -24,11 +24,13 @@ export const saveUser = async (user: UserRegisterData) => {
 
 }
 
+//Get the user bassed in the email (method just for exist validation)
 export const getUser = async (email: string):Promise<User>=>{
     const [rows] = await pool.query('SELECT * FROM users where email = ?;',[email]);
     return rows[0];
 }
 
+//Get the user bassed in his id used in the token validation
 export const getUserById = async (id: number) => {
     const [rows] = await pool.query('SELECT * FROM users where id = ?;',[id]);
     return rows[0];
