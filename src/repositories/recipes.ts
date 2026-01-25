@@ -7,7 +7,19 @@ import { ResultSetHeader } from "mysql2";
 export const findAllRecipes = async () => {
     //Setting the two types of the response, being the Recipe type of the data that we get from
     // the database.
-    const [rows]: [Recipe[], FieldPacket[]] = await pool.query('SELECT * FROM recipes where is_private = 0;');
+    const [rows]: [Recipe[], FieldPacket[]] = await pool.query(`
+        SELECT 
+            r.id AS recipe_id,
+            r.name,
+            r.description,
+            r.ingredients,
+            r.image,
+            u.id as user_id,
+            u.name as user_name,
+            u.username as user_username,
+            u.email as user_email
+        FROM recipes r
+        INNER JOIN users u ON r.Id_user = u.id where r.is_private = false;`);
     return rows;
 }
 
