@@ -9,7 +9,7 @@ export const findAllRecipes = async () => {
     // the database.
     const [rows]: [Recipe[], FieldPacket[]] = await pool.query(`
         SELECT 
-            r.id AS recipe_id,
+            r.id,
             r.name,
             r.description,
             r.ingredients,
@@ -19,7 +19,7 @@ export const findAllRecipes = async () => {
             u.username as user_username,
             u.email as user_email
         FROM recipes r
-        INNER JOIN users u ON r.Id_user = u.id where r.is_private = false;`);
+        INNER JOIN users u ON r.Id_user = u.id where r.is_private = false order by rand();`);
     return rows;
 }
 
@@ -32,10 +32,15 @@ export const findUserRecipes = async (userId: number) => {
             r.ingredients,
             r.image,
             r.is_private,
-            r.Id_user
+            u.id        AS user_id,
+            u.username  AS user_username,
+            u.name      AS user_name,
+            u.email     AS user_email
         FROM recipes r
         JOIN user_recipes ur
-        ON ur.id_recipe = r.id
+            ON ur.id_recipe = r.id
+        JOIN users u
+            ON u.id = r.Id_user
         WHERE ur.id_user = ?;`,
         [userId]
     );
