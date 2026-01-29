@@ -4,6 +4,7 @@ import formidable from 'formidable';
 import cloudinary from "../config/cloudinary";
 import { Recipe, SavedRecipe } from "../models/recipe";
 import { v4 as uuid} from 'uuid';
+import { usernameExists } from "../repositories/user";
 
 //Function that get all the public recipes published by all the users
 export const getRecipes = async (req: Request, res: Response) => {
@@ -79,6 +80,10 @@ export const addRecipe = async (req: Request, res: Response) => {
 export const getUserPublicRecipes = async (req: Request, res: Response)=>{
 
     const {username} = req.params;
+    const existsUsername = await usernameExists(username.toString());
+    if(!existsUsername){
+        return res.status(404).json({error: 'User not found'});
+    }
     const publicUserRecipes = await getRecipesByUsername(username.toString());
     if(publicUserRecipes.length === 0){
         return res.status(404).json({error: 'The user dont have any public recipe'});
