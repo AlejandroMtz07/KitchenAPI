@@ -19,9 +19,6 @@ export const getRecipes = async (req: Request, res: Response) => {
 //Function that get all the recipes of the user, including the private recipes
 export const getUserRecipes = async (req: Request, res: Response) =>{
     const userRecipes = await findUserRecipes(req.user.id);
-    if(userRecipes.length === 0){
-        return res.status(404).json({msg: 'Any recipe found'});
-    }
     return res.status(200).json({recipes: userRecipes});
 }
 
