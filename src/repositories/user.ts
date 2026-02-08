@@ -1,5 +1,6 @@
+import { FieldPacket } from "mysql2";
 import { pool } from "../config/db";
-import { User, UserRegisterData } from "../models/user";
+import { DatabaseUsernames, User, UserRegisterData } from "../models/user";
 import { hashPassword } from "../utils/auth";
 
 
@@ -13,6 +14,14 @@ export const emailExists = async (email: String) => {
 export const usernameExists = async (username: string) => {
     const [rows] = await pool.query('SELECT * FROM users where username = ?;', [username]);
     return rows[0];
+}
+
+//Get all the usernames in the database
+export const findUsernames = async (username : string)=>{
+    const [rows] = await pool.query(`
+        SELECT username FROM users WHERE username LIKE ? LIMIT 10;
+    `,['%'+username+'%']);
+    return rows;
 }
 
 //Save the user in the database

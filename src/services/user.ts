@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { emailExists, getUser, saveUser, usernameExists } from "../repositories/user";
+import { emailExists, findUsernames, getUser, saveUser, usernameExists } from "../repositories/user";
 import { User, UserRegisterData } from "../models/user";
 import { comparePassword } from "../utils/auth";
 import { generateToken } from "../utils/jwt";
@@ -66,4 +66,13 @@ export const loginUser = async (req: Request, res: Response) => {
     const token = generateToken({id: user.id});
     return res.status(200).json({msg: 'Welcome: '+user.name, token: token});
 
+}
+
+export const getUsernames = async (req: Request, res: Response)=>{
+
+    const {username} = req.params;
+
+    const usernames = await findUsernames(String(username));
+
+    return res.status(200).json({usernames: usernames});
 }

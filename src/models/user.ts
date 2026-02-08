@@ -11,3 +11,6 @@ export type User = {
 
 //Type for the data sended for the user register
 export type UserRegisterData = Pick<User,'name'|'lastname'|'email'|'password'|'username'>
+
+//Type for the username list
+export type DatabaseUsernames = Pick<User, 'username'>

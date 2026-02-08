@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authenticated, handleInputErrors } from './middlewares/validation';
 import { body } from 'express-validator';
-import { loginUser, registerUser } from './services/user';
+import { getUsernames, loginUser, registerUser } from './services/user';
 import { addRecipe, getRecipes, getUserPublicRecipes, getUserRecipes, savePublicRecipe } from './services/recipes';
 
 const router = Router();
@@ -30,6 +30,12 @@ router.post(
     handleInputErrors,
     loginUser
 );
+
+//Get all the usernames
+router.get(
+    '/users/:username',
+    getUsernames
+)
 
 //Get global recipes book
 router.get(
