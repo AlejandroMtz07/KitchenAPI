@@ -99,3 +99,9 @@ export const getRecipeById = async (recipe_id: number)=>{
     )
     return rows[0];
 }
+
+export const findRecipesByName = async (name: string)=>{
+    const [rows] : [Recipe[],FieldPacket[]] = await pool.query(
+        'SELECT * FROM recipes where recipes.name like ?;',['%'+name+'%'])
+    return rows;
+}

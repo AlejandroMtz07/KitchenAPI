@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { authenticated, handleInputErrors } from './middlewares/validation';
 import { body } from 'express-validator';
 import { getUsernames, loginUser, registerUser } from './services/user';
-import { addRecipe, getRecipes, getUserPublicRecipes, getUserRecipes, savePublicRecipe } from './services/recipes';
+import { addRecipe, getRecipeByName, getRecipes, getUserPublicRecipes, getUserRecipes, savePublicRecipe } from './services/recipes';
 
 const router = Router();
 
@@ -55,6 +55,11 @@ router.get(
     '/recipes/:username',
     getUserPublicRecipes
 );
+
+router.get(
+    '/recipes/find/:name',
+    getRecipeByName
+)
 
 //Add a new recipe
 router.post(
