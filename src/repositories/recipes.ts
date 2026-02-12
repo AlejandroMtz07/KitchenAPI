@@ -58,14 +58,14 @@ export const saveRecipe = async (recipe: SavedRecipe) => {
             [recipe.name, recipe.description, recipe.is_private, recipe.ingredients, recipe.image, recipe.Id_user]
         );
     return await pool
-        .query('INSERT INTO user_recipes (id_user,id_recipe,saved_at) values (?,?,now());', 
+        .query('INSERT INTO user_recipes (id_user,id_recipe,saved_at) values (?,?,now());',
             [recipe.Id_user, rows.insertId]
-    );
+        );
 
 }
 
-export const getRecipesByUsername = async (username : string)=>{
-    const [rows] : [Recipe[], FieldPacket[]] = await pool.query(
+export const getRecipesByUsername = async (username: string) => {
+    const [rows]: [Recipe[], FieldPacket[]] = await pool.query(
         `SELECT
             r.id,
             r.name,
@@ -85,23 +85,29 @@ export const getRecipesByUsername = async (username : string)=>{
     return rows;
 }
 
-export const saveRecipeFromPublicRecipes = async (user_id: number,recipe_id : number)=>{
+export const saveRecipeFromPublicRecipes = async (user_id: number, recipe_id: number) => {
     return await pool.query(
         'INSERT INTO user_recipes (id_user,id_recipe,saved_at) values (?,?,now());',
-        [user_id,recipe_id]
+        [user_id, recipe_id]
     );
 };
 
-export const getRecipeById = async (recipe_id: number)=>{
-    const [rows] : [Recipe[],FieldPacket[]] = await pool.query(
+export const getRecipeById = async (recipe_id: number) => {
+    const [rows]: [Recipe[], FieldPacket[]] = await pool.query(
         'SELECT * FROM recipes where id = ?;',
         [recipe_id]
     )
     return rows[0];
 }
 
-export const findRecipesByName = async (name: string)=>{
-    const [rows] : [Recipe[],FieldPacket[]] = await pool.query(
-        'SELECT * FROM recipes where recipes.name like ?;',['%'+name+'%'])
+export const findRecipesByName = async (name: string) => {
+    const [rows]: [Recipe[], FieldPacket[]] = await pool.query(
+        `SELECT
+            r.name AS name,
+            u.username AS user_name
+        FROM recipes r
+        JOIN users u
+        ON u.id = r.Id_user
+        WHERE r.name LIKE ? and r.is_private = false;`,['%'+name+'%'])
     return rows;
 }

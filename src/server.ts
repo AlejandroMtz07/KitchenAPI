@@ -8,7 +8,7 @@ import { corsConfig } from './config/cors';
 const app = express();
 
 //Cors configuration
-// app.use(cors(corsConfig));
+app.use(cors(corsConfig));
 
 //Dependency for json reading
 app.use(json());
