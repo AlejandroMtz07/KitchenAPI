@@ -64,7 +64,7 @@ export const loginUser = async (req: Request, res: Response) => {
         `
     )
     const token = generateToken({id: user.id});
-    return res.status(200).json({msg: 'Welcome: '+user.name, token: token});
+    return res.status(200).json({msg: 'Welcome: '+user.name, token: token,username: user.username});
 
 }
 
