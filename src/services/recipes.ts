@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { findAllRecipes, findRecipesByName, findUserRecipes, getRecipeById, getRecipesByUsername, saveRecipe, saveRecipeFromPublicRecipes } from "../repositories/recipes";
+import { findAllRecipes, findRecipesByName, findUserRecipes, getRecipeById, getRecipesByUsername, saveRecipe, saveRecipeFromPublicRecipes, updateRecipeById } from "../repositories/recipes";
 import formidable from 'formidable';
 import cloudinary from "../config/cloudinary";
 import { Recipe, SavedRecipe } from "../models/recipe";
@@ -54,7 +54,7 @@ export const addRecipe = async (req: Request, res: Response) => {
                                 name: name.toString(),
                                 description: description.toString(),
                                 ingredients: ingredients.toString(),
-                                is_private: is_private.toString() === '1' ? true : false,
+                                is_private: is_private.toString(),
                                 image: imageUrl,
                                 Id_user: req.user.id
                             }
@@ -119,6 +119,15 @@ export const getRecipeByName = async (req: Request, res: Response)=>{
     return res.status(200).json({recipes: recipes});
 }
 
-export const updateRecipe = async (id: number)=>{
-    
+export const updateRecipe = async (req: Request, res: Response)=>{
+    const {name,description,is_private} = req.body;
+    const {id} = req.params;
+
+    if(!await getRecipeById(Number(id))){
+        return res.status(404).json({error: 'Recipe not found'});
+    }
+
+    await updateRecipeById(Number(id),name,description,is_private);
+    return res.status(200).json({msg: 'Recipe updated'});
+
 }

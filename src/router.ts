@@ -78,8 +78,8 @@ router.post(
 router.put(
     '/recipes/:id',
     [
-        body('name').trim().isEmpty().withMessage('New recipe name cannot be empty'),
-        body('description').trim().isEmpty().withMessage('Description cannot be empty')
+        body('name').notEmpty().withMessage('New recipe name cannot be empty'),
+        body('description').notEmpty().withMessage('Description cannot be empty')
     ],
     handleInputErrors,
     authenticated,

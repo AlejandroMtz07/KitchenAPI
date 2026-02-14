@@ -112,6 +112,11 @@ export const findRecipesByName = async (name: string) => {
     return rows;
 }
 
-export const updateRecipeById = async (id: number)=>{
+export const updateRecipeById = async (id: number, name: string, description: string, is_private: string)=>{
+
+    return await pool.query(
+        `UPDATE recipes set name = ?, description = ?, is_private = ? where id = ?;`,
+        [name,description,is_private,id]
+    )
 
 }
