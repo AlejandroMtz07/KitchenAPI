@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { authenticated, handleInputErrors } from './middlewares/validation';
 import { body } from 'express-validator';
 import { getUsernames, loginUser, registerUser } from './services/user';
-import { addRecipe, getRecipeByName, getRecipes, getUserPublicRecipes, getUserRecipes, savePublicRecipe } from './services/recipes';
+import { addRecipe, getRecipeByName, getRecipes, getUserPublicRecipes, getUserRecipes, savePublicRecipe, updateRecipe } from './services/recipes';
 
 const router = Router();
 
@@ -73,6 +73,17 @@ router.post(
     '/recipes/:id',
     authenticated,
     savePublicRecipe
+)
+
+router.put(
+    '/recipes/:id',
+    [
+        body('name').trim().isEmpty().withMessage('New recipe name cannot be empty'),
+        body('description').trim().isEmpty().withMessage('Description cannot be empty')
+    ],
+    handleInputErrors,
+    authenticated,
+    updateRecipe
 )
 
 export default router;

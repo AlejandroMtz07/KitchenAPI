@@ -118,3 +118,7 @@ export const getRecipeByName = async (req: Request, res: Response)=>{
     }
     return res.status(200).json({recipes: recipes});
 }
+
+export const updateRecipe = async (id: number)=>{
+    
+}

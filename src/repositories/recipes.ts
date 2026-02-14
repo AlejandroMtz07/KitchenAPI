@@ -111,3 +111,7 @@ export const findRecipesByName = async (name: string) => {
         WHERE r.name LIKE ? and r.is_private = false;`,['%'+name+'%'])
     return rows;
 }
+
+export const updateRecipeById = async (id: number)=>{
+
+}
