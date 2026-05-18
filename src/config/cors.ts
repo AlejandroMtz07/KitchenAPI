@@ -3,7 +3,7 @@ import {CorsOptions} from 'cors'
 export const corsConfig : CorsOptions = {
     origin: function(origin, callback){
         
-        if(origin === 'http://localhost:5173'){
+        if(origin === 'https://kitchenrecip.netlify.app/'){
             callback(null,true);
         }else{
             callback(new Error('CORS error'));
