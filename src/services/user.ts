@@ -53,16 +53,16 @@ export const loginUser = async (req: Request, res: Response) => {
         return res.status(401).json({error: 'Incorrect password'});
     }
 
-    await sendMail(
-        email,
-        'Welcome from the Kitchen Recipes team.',
-        'Welcome again.',
-        `
-            <h1>
-                Welcome, this is a test of the nodemailer serve, do not reply this mail.
-            </h1>
-        `
-    )
+    // await sendMail(
+    //     email,
+    //     'Welcome from the Kitchen Recipes team.',
+    //     'Welcome again.',
+    //     `
+    //         <h1>
+    //             Welcome, this is a test of the nodemailer serve, do not reply this mail.
+    //         </h1>
+    //     `
+    // )
     const token = generateToken({id: user.id});
     return res.status(200).json({msg: 'Welcome: '+user.name, token: token,username: user.username});
 
