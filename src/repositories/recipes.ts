@@ -4,6 +4,8 @@ import { Recipe, SavedRecipe } from "../models/recipe";
 import { ResultSetHeader } from "mysql2";
 
 
+//Method that returns all 
+// the recipes in a random order
 export const findAllRecipes = async () => {
     //Setting the two types of the response, being the Recipe type of the data that we get from
     // the database.
@@ -23,6 +25,8 @@ export const findAllRecipes = async () => {
     return rows;
 }
 
+//Method that returns all the saved recipes
+//of the user being the private and public recipes 
 export const findUserRecipes = async (userId: number) => {
     const [rows]: [Recipe[], FieldPacket[]] = await pool.query(
         `SELECT
@@ -47,6 +51,7 @@ export const findUserRecipes = async (userId: number) => {
     return rows;
 }
 
+//Method that saves a recipe
 export const saveRecipe = async (recipe: SavedRecipe) => {
     //Using the interface ResultSetHeader wich allow us to get the id of the inserted recipe
     //because when we insert data, the database doesn't resturn any information about the 
@@ -64,6 +69,8 @@ export const saveRecipe = async (recipe: SavedRecipe) => {
 
 }
 
+//Method that gets all the public recipes 
+//of a given user
 export const getRecipesByUsername = async (username: string) => {
     const [rows]: [Recipe[], FieldPacket[]] = await pool.query(
         `SELECT
@@ -85,6 +92,8 @@ export const getRecipesByUsername = async (username: string) => {
     return rows;
 }
 
+//Method that saves a public recipe into a public recipe
+//book of a user
 export const saveRecipeFromPublicRecipes = async (user_id: number, recipe_id: number) => {
     return await pool.query(
         'INSERT INTO user_recipes (id_user,id_recipe,saved_at) values (?,?,now());',
@@ -92,6 +101,7 @@ export const saveRecipeFromPublicRecipes = async (user_id: number, recipe_id: nu
     );
 };
 
+//Method that gets a recipe by his id
 export const getRecipeById = async (recipe_id: number) => {
     const [rows]: [Recipe[], FieldPacket[]] = await pool.query(
         'SELECT * FROM recipes where id = ?;',
@@ -100,6 +110,7 @@ export const getRecipeById = async (recipe_id: number) => {
     return rows[0];
 }
 
+//Method that filters all the recipes based on his name.
 export const findRecipesByName = async (name: string) => {
     const [rows]: [Recipe[], FieldPacket[]] = await pool.query(
         `SELECT
@@ -112,6 +123,8 @@ export const findRecipesByName = async (name: string) => {
     return rows;
 }
 
+//Method that updates a user recipe, oly being able to edit
+//if the user is the owner of the recipe.
 export const updateRecipeById = async (id: number, name: string, description: string, is_private: string)=>{
 
     return await pool.query(
