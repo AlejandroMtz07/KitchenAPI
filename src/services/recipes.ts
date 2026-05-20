@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { findAllRecipes, findRecipesByName, findUserRecipes, getRecipeById, getRecipesByUsername, saveRecipe, saveRecipeFromPublicRecipes, updateRecipeById } from "../repositories/recipes";
+import { findAllRecipes, findRecipesByName, findUserRecipes, getRecipeById, getRecipesByUsername, saveRecipe, saveRecipeFromPublicRecipes, updateRecipeById, validateSavedRecipe } from "../repositories/recipes";
 import formidable from 'formidable';
 import cloudinary from "../config/cloudinary";
 import { Recipe, SavedRecipe } from "../models/recipe";
@@ -101,6 +101,17 @@ export const savePublicRecipe = async (req: Request, res: Response)=>{
 
     if(recipe.Id_user === req.user.id){
         return res.status(409).json({error: 'This recipe is already yours'});
+    }
+
+    //Validate if the recipe is already saved
+    const alreadySaved = await validateSavedRecipe(
+        req.user.id,
+        Number(id)
+    );
+    if(alreadySaved){
+        return res.status(409).json({
+            error: 'Recipe already saved'
+        });
     }
 
     await saveRecipeFromPublicRecipes(req.user.id, Number(id));

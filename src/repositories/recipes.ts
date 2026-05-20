@@ -95,10 +95,17 @@ export const getRecipesByUsername = async (username: string) => {
 //Method that saves a public recipe into a public recipe
 //book of a user
 export const saveRecipeFromPublicRecipes = async (user_id: number, recipe_id: number) => {
-    return await pool.query(
-        'INSERT INTO user_recipes (id_user,id_recipe,saved_at) values (?,?,now());',
-        [user_id, recipe_id]
-    );
+    //Add validation in case of the user has already 
+    //added the recipe to their recipe book
+    try{
+        const [ result ] = await pool.query(
+            ` INSERT INTO user_recipes (id_user, id_recipe, saved_at) VALUES (?,?,now());`,
+            [user_id,recipe_id]
+        )
+        return {success: true,result}
+    }catch( error: any){
+
+    }
 };
 
 //Method that gets a recipe by his id
@@ -132,4 +139,20 @@ export const updateRecipeById = async (id: number, name: string, description: st
         [name,description,is_private,id]
     )
 
+}
+
+//Method that will delete a public recipe from a user public 
+//recipe book
+export const validateSavedRecipe = async (user_id: number,recipe_id: number)=>{
+    const [ rows ]:any = await pool.query(
+        `
+        SELECT 1
+        FROM user_recipes
+        WHERE id_user = ?
+        AND id_recipe = ?
+        LIMIT 1;
+        `,
+        [user_id,recipe_id]
+    );
+    return rows.length > 0;
 }
