@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { findAllRecipes, findRecipesByName, findUserRecipes, getRecipeById, getRecipesByUsername, saveRecipe, saveRecipeFromPublicRecipes, updateRecipeById, validateSavedRecipe } from "../repositories/recipes";
+import { deleteRecipeFromBook, findAllRecipes, findRecipesByName, findUserRecipes, getRecipeById, getRecipesByUsername, saveRecipe, saveRecipeFromPublicRecipes, updateRecipeById, validateSavedRecipe } from "../repositories/recipes";
 import formidable from 'formidable';
 import cloudinary from "../config/cloudinary";
 import { Recipe, SavedRecipe } from "../models/recipe";
@@ -140,5 +140,17 @@ export const updateRecipe = async (req: Request, res: Response)=>{
 
     await updateRecipeById(Number(id),name,description,is_private);
     return res.status(200).json({msg: 'Recipe updated'});
+
+}
+
+export const removeRecipeFromBook = async (req: Request, res: Response)=>{
+    
+    const {id} = req.params;
+    
+    const isRecipeDeleted = await deleteRecipeFromBook(req.user.id,Number(id));
+
+    if(isRecipeDeleted){
+        return res.status(200).json({msg: 'Recipe removed'});
+    }
 
 }

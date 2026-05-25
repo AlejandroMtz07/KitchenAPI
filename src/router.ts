@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { authenticated, handleInputErrors } from './middlewares/validation';
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 import { getUsernames, loginUser, registerUser } from './services/user';
-import { addRecipe, getRecipeByName, getRecipes, getUserPublicRecipes, getUserRecipes, savePublicRecipe, updateRecipe } from './services/recipes';
+import { addRecipe, getRecipeByName, getRecipes, getUserPublicRecipes, getUserRecipes, removeRecipeFromBook, savePublicRecipe, updateRecipe } from './services/recipes';
 
 const router = Router();
 
@@ -85,6 +85,17 @@ router.put(
     handleInputErrors,
     authenticated,
     updateRecipe
+)
+
+//Delete a recipe
+router.delete(
+    '/recipes/:id',
+    [
+        param('id').isNumeric().withMessage('The id must be a number'),
+    ],
+    handleInputErrors,
+    authenticated,
+    removeRecipeFromBook
 )
 
 export default router;

@@ -141,8 +141,8 @@ export const updateRecipeById = async (id: number, name: string, description: st
 
 }
 
-//Method that will delete a public recipe from a user public 
-//recipe book
+//Method that chacks if a recipe is already in the user's recipe book
+//and return true or false
 export const validateSavedRecipe = async (user_id: number,recipe_id: number)=>{
     const [ rows ]:any = await pool.query(
         `
@@ -155,4 +155,14 @@ export const validateSavedRecipe = async (user_id: number,recipe_id: number)=>{
         [user_id,recipe_id]
     );
     return rows.length > 0;
+}
+
+export const deleteRecipeFromBook = async (user_id: number, recipe_id: number)=>{
+
+    return await pool.query(
+        `
+        DELETE FROM user_recipes
+        WHERE id_user = ?
+        AND id_recipe = ?;`,[user_id,recipe_id]
+    );
 }
